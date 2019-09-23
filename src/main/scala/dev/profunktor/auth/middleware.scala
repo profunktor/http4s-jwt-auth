@@ -13,6 +13,7 @@ import org.http4s.headers.Authorization
 import org.http4s.server.AuthMiddleware
 import pdi.jwt._
 import pdi.jwt.algorithms._
+import pdi.jwt.exceptions.JwtException
 
 case class JwtAuthMiddleware[F[_]: MonadError[?[_], Throwable]](
     jwtAuth: JwtAuth
@@ -40,7 +41,11 @@ case class JwtAuthMiddleware[F[_]: MonadError[?[_], Throwable]](
   private def authUser[A: Coercible[String, ?]]: Kleisli[F, Request[F], Either[String, A]] =
     Kleisli { request =>
       bearerTokenFromRequest(request).fold("No token in headers".asLeft[A].pure[F]) { token =>
-        decodeToken(token).map(_.content.coerce[A].asRight[String])
+        decodeToken(token)
+          .map(_.content.coerce[A].asRight[String])
+          .recover {
+            case _: JwtException => "Invalid token".asLeft[A]
+          }
       }
     }
 
