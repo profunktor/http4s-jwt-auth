@@ -3,8 +3,6 @@ package dev.profunktor.auth
 import cats.{ MonadError }
 import cats.data.{ Kleisli, OptionT }
 import cats.implicits._
-import io.estatico.newtype.Coercible
-import io.estatico.newtype.ops._
 import jwt._
 import org.http4s.{ AuthedRoutes, Request }
 import org.http4s.dsl.Http4sDsl
@@ -13,8 +11,9 @@ import pdi.jwt._
 import pdi.jwt.exceptions.JwtException
 
 object JwtAuthMiddleware {
-  def apply[F[_]: MonadError[?[_], Throwable], A: Coercible[String, ?]](
-      jwtAuth: JwtAuth
+  def apply[F[_]: MonadError[?[_], Throwable], A](
+      jwtAuth: JwtAuth,
+      authenticate: JwtClaim => F[Option[A]]
   ): AuthMiddleware[F, A] = {
     val dsl = new Http4sDsl[F] {}; import dsl._
 
@@ -28,7 +27,8 @@ object JwtAuthMiddleware {
       Kleisli { request =>
         AuthHeaders.getBearerToken(request).fold("Bearer token not found".asLeft[A].pure[F]) { token =>
           decodeToken(token)
-            .map(_.content.coerce[A].asRight[String])
+            .flatMap(authenticate)
+            .map(_.fold("not found".asLeft[A])(_.asRight[String]))
             .recover {
               case _: JwtException => "Invalid access token".asLeft[A]
             }

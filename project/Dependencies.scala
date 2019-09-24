@@ -8,11 +8,9 @@ object Dependencies {
     val fs2        = "2.0.0"
     val http4s     = "0.21.0-M5"
     val jwt        = "4.1.0"
-    val newtype    = "0.4.3"
 
     val betterMonadicFor = "0.3.0"
     val kindProjector    = "0.10.3"
-    val macroParadise    = "2.1.1"
 
     val scalaTest = "3.0.8"
   }
@@ -24,7 +22,6 @@ object Dependencies {
     lazy val catsEffect = "org.typelevel" %% "cats-effect" % Versions.catsEffect
     lazy val fs2        = "co.fs2"        %% "fs2-core"    % Versions.fs2
     lazy val jwtCore    = "com.pauldijou" %% "jwt-core"    % Versions.jwt
-    lazy val newtype    = "io.estatico"   %% "newtype"     % Versions.newtype
 
     lazy val http4sDsl    = http4s("http4s-dsl")
     lazy val http4sServer = http4s("http4s-blaze-server")
@@ -32,7 +29,7 @@ object Dependencies {
     // Compiler plugins
     lazy val betterMonadicFor = "com.olegpy"    %% "better-monadic-for" % Versions.betterMonadicFor
     lazy val kindProjector    = "org.typelevel" %% "kind-projector"     % Versions.kindProjector
-    lazy val macroParadise    = "org.scalamacros" % "paradise" % Versions.macroParadise
+
     // Test
     lazy val scalaTest = "org.scalatest" %% "scalatest" % Versions.scalaTest
   }

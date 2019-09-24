@@ -22,16 +22,6 @@ def maxClassFileName(v: String) = CrossVersion.partialVersion(v) match {
   case _             => Seq("-Xmax-classfile-name", "100")
 }
 
-def macroOptionsFlag(v: String) = CrossVersion.partialVersion(v) match {
-  case Some((2, 13)) => Seq("-Ymacro-annotations")
-  case _             => Seq.empty[String]
-}
-
-def macroOptionsDep(v: String) = CrossVersion.partialVersion(v) match {
-  case Some((2, 13)) => Seq.empty
-  case _             => Seq(compilerPlugin(Libraries.macroParadise cross CrossVersion.full))
-}
-
 val commonSettings = Seq(
   organizationName := "Opinionated JWT authentication library for Http4s",
   startYear := Some(2019),
@@ -77,8 +67,6 @@ lazy val root = (project in file("."))
 lazy val core = (project in file("core"))
   .settings(
     name := "http4s-jwt-auth",
-    scalacOptions ++= macroOptionsFlag(scalaVersion.value),
-    libraryDependencies ++= macroOptionsDep(scalaVersion.value),
     libraryDependencies ++= Seq(
           compilerPlugin(Libraries.kindProjector),
           compilerPlugin(Libraries.betterMonadicFor),
@@ -88,7 +76,6 @@ lazy val core = (project in file("core"))
           Libraries.http4sDsl,
           Libraries.http4sServer,
           Libraries.jwtCore,
-          Libraries.newtype,
           Libraries.scalaTest % Test
         )
   )

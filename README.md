@@ -7,24 +7,25 @@ http4s-jwt-auth
 
 Opinionated [JWT](https://tools.ietf.org/html/rfc7519) authentication library for [http4s](https://http4s.org/).
 
-### Additional Dependencies
+### Dependencies
 
-- [jwt-scala](https://github.com/pauldijou/jwt-scala)
-- [newtype](https://github.com/estatico/scala-newtype)
+[jwt-scala](https://github.com/pauldijou/jwt-scala) is being used to encode and decode JWT tokens.
 
 ### Usage
 
 ```scala
 import cats.effect.IO
 import dev.profunktor.auth.jwt._
-import io.estatico.newtype.macros.newtype
-import io.estatico.newtype.ops._
 import pdi.jwt._
 
-@newtype case class AuthUser(value: String)
+case class AuthUser(id: Long, name: String)
 
-val jwtAuth    = JwtAuth("53cr3t".coerce[JwtSecretKey], JwtAlgorithm.HS256)
-val middleware = JwtAuthMiddleware[IO, AuthUser](jwtAuth)
+// i.e. retrieve user from database
+val authenticate: JwtClaim => IO[Option[AuthUser]] =
+  claim => AuthUser(123L, "joe").some.pure[IO]
+
+val jwtAuth    = JwtAuth(JwtSecretKey("53cr3t"), JwtAlgorithm.HS256)
+val middleware = JwtAuthMiddleware[IO, AuthUser](jwtAuth, authenticate)
 
 val routes: HttpRoutes[IO] = ???
 val securedRoutes: HttpRoutes[IO] = middleware(routes)
@@ -33,3 +34,5 @@ val securedRoutes: HttpRoutes[IO] = middleware(routes)
 ### Notes
 
 This library is quite opinionated, use with caution. Examples and docs coming soon!
+
+If you would like to see support for any other functionality come have a chat in the Gitter channel!
