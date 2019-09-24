@@ -1,7 +1,7 @@
 package dev.profunktor.auth
 
 import io.estatico.newtype.macros.newtype
-import pdi.jwt._
+import pdi.jwt.algorithms.JwtHmacAlgorithm
 
 object jwt {
 
@@ -10,8 +10,7 @@ object jwt {
 
   case class JwtAuth(
       secretKey: JwtSecretKey,
-      jwtClaimStr: JwtClaim,
-      jwtAlgorithm: JwtAlgorithm
+      jwtAlgorithm: JwtHmacAlgorithm
   )
 
 }
