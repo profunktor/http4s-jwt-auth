@@ -118,6 +118,16 @@ lazy val microsite = project
                 Map("title" -> "Code of Conduct")
               )
         ),
+    micrositePalette := Map(
+      "brand-primary"   -> "#0b6e50",
+      "brand-secondary" -> "#15382e",
+      "brand-tertiary"  -> "#080f0d",
+      "gray-dark"       -> "#453E46",
+      "gray"            -> "#837F84",
+      "gray-light"      -> "#E3E2E3",
+      "gray-lighter"    -> "#F4F3F4",
+      "white-color"     -> "#FFFFFF"
+    ),
     micrositeGitterChannel := true,
     micrositeGitterChannelUrl := "profunktor-dev/http4s-jwt-auth",
     micrositePushSiteWith := GitHub4s,
