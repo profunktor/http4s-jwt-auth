@@ -1,6 +1,5 @@
 package dev.profunktor.auth
 
-import cats.data.{ Kleisli, OptionT }
 import io.estatico.newtype.ops._
 import jwt._
 import org.http4s._
@@ -13,4 +12,3 @@ object AuthHeaders {
       case Authorization(Token(AuthScheme.Bearer, token)) => token.coerce[JwtToken]
     }
 }
-

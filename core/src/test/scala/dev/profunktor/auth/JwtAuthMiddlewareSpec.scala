@@ -11,7 +11,6 @@ import org.scalatest.compatible.Assertion
 import scala.concurrent.Future
 
 class JwtAuthMiddlewareSpec extends AsyncFunSuite with JwtFixture {
-  import TestUsers._
 
   private def assertResp(response: OptionT[IO, Response[IO]], expected: Status): Future[Assertion] =
     response.value

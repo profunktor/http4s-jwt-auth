@@ -10,7 +10,6 @@ import org.http4s.{ AuthedRoutes, Request }
 import org.http4s.dsl.Http4sDsl
 import org.http4s.server.AuthMiddleware
 import pdi.jwt._
-import pdi.jwt.algorithms._
 import pdi.jwt.exceptions.JwtException
 
 object JwtAuthMiddleware {
@@ -25,7 +24,7 @@ object JwtAuthMiddleware {
     def decodeToken(token: JwtToken): F[JwtClaim] =
       Jwt.decode(token.value, jwtAuth.secretKey.value, Seq(jwtAuth.jwtAlgorithm)).liftTo[F]
 
-    def authUser[A: Coercible[String, ?]]: Kleisli[F, Request[F], Either[String, A]] =
+    val authUser: Kleisli[F, Request[F], Either[String, A]] =
       Kleisli { request =>
         AuthHeaders.getBearerToken(request).fold("Bearer token not found".asLeft[A].pure[F]) { token =>
           decodeToken(token)

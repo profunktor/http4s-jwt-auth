@@ -12,6 +12,7 @@ object Dependencies {
 
     val betterMonadicFor = "0.3.0"
     val kindProjector    = "0.10.3"
+    val macroParadise    = "2.1.1"
 
     val scalaTest = "3.0.8"
   }
@@ -31,7 +32,7 @@ object Dependencies {
     // Compiler plugins
     lazy val betterMonadicFor = "com.olegpy"    %% "better-monadic-for" % Versions.betterMonadicFor
     lazy val kindProjector    = "org.typelevel" %% "kind-projector"     % Versions.kindProjector
-
+    lazy val macroParadise    = "org.scalamacros" % "paradise" % Versions.macroParadise
     // Test
     lazy val scalaTest = "org.scalatest" %% "scalatest" % Versions.scalaTest
   }
