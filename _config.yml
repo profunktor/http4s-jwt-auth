@@ -1,0 +1,11 @@
+name: Http4s Jwt Auth
+baseurl: ''
+description: Opinionated JWT authentication library for Http4s
+highlighter: rouge
+docs: true
+collections:
+  tut:
+    output: true
+version: 0.0.1
+org: Opinionated JWT authentication library for Http4s
+markdown: kramdown
