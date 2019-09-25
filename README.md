@@ -16,8 +16,11 @@ Opinionated [JWT](https://tools.ietf.org/html/rfc7519) authentication library fo
 
 ```scala
 import cats.effect.IO
+import cats.implicits._
+import dev.profunktor.auth._
 import dev.profunktor.auth.jwt._
 import pdi.jwt._
+import org.http4s._
 
 case class AuthUser(id: Long, name: String)
 
@@ -28,7 +31,7 @@ val authenticate: JwtClaim => IO[Option[AuthUser]] =
 val jwtAuth    = JwtAuth(JwtSecretKey("53cr3t"), JwtAlgorithm.HS256)
 val middleware = JwtAuthMiddleware[IO, AuthUser](jwtAuth, authenticate)
 
-val routes: HttpRoutes[IO] = ???
+val routes: AuthedRoutes[AuthUser, IO] = ???
 val securedRoutes: HttpRoutes[IO] = middleware(routes)
 ```
 
