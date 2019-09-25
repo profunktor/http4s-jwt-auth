@@ -86,6 +86,7 @@ lazy val microsite = project
   .enablePlugins(MicrositesPlugin)
   .settings(commonSettings: _*)
   .settings(noPublish)
+  .settings(publishLocalConfiguration := publishLocalConfiguration.value.withOverwrite(true))
   .settings(
     micrositeName := "Http4s Jwt Auth",
     micrositeDescription := "Opinionated JWT authentication library for Http4s",
