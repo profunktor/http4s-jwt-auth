@@ -12,6 +12,12 @@ Opinionated [JWT](https://tools.ietf.org/html/rfc7519) authentication library fo
 
 [jwt-scala](https://github.com/pauldijou/jwt-scala) is being used to encode and decode JWT tokens.
 
+Add the following dependency to your `build.sbt` (check latest version on the badge):
+
+```
+"dev.profunktor" %% "http4s-jwt-auth" % Version
+```
+
 ### Usage
 
 ```scala
