@@ -164,18 +164,12 @@ case class AuthUser(id: Long, name: String)
 // (To diagnose errors in synthetic code, try adding `// show` to the end of your input.)
 // defined class AuthUser
 
-val authenticate: JwtClaim => IO[Option[AuthUser]] =
-  claim => AuthUser(123L, "joe").some.pure[IO]
+val authenticate: JwtToken => JwtClaim => IO[Option[AuthUser]] =
+  token => claim => AuthUser(123L, "joe").some.pure[IO]
 // 
 //        import dev.profunktor.auth._
 //                                   ^
 // <synthetic>:7: warning: Unused import
-// 
-// (To diagnose errors in synthetic code, try adding `// show` to the end of your input.)
-// 
-//        import dev.profunktor.auth.jwt._
-//                                       ^
-// <synthetic>:10: warning: Unused import
 // 
 // (To diagnose errors in synthetic code, try adding `// show` to the end of your input.)
 // 
@@ -184,10 +178,13 @@ val authenticate: JwtClaim => IO[Option[AuthUser]] =
 // <synthetic>:16: warning: Unused import
 // 
 // (To diagnose errors in synthetic code, try adding `// show` to the end of your input.)
-//          claim => AuthUser(123L, "joe").some.pure[IO]
+//          token => claim => AuthUser(123L, "joe").some.pure[IO]
 //          ^
+// On line 3: warning: parameter value token in anonymous function is never used
+//          token => claim => AuthUser(123L, "joe").some.pure[IO]
+//                   ^
 // On line 3: warning: parameter value claim in anonymous function is never used
-// authenticate: pdi.jwt.JwtClaim => cats.effect.IO[Option[AuthUser]] = $$Lambda$6282/681092789@7ebfb7da
+// authenticate: dev.profunktor.auth.jwt.JwtToken => (pdi.jwt.JwtClaim => cats.effect.IO[Option[AuthUser]]) = $$Lambda$16140/749739683@1eb534d9
 
 val jwtAuth    = JwtAuth(JwtSecretKey("53cr3t"), JwtAlgorithm.HS256)
 // 
@@ -241,7 +238,7 @@ val middleware = JwtAuthMiddleware[IO, AuthUser](jwtAuth, authenticate)
 // <synthetic>:16: warning: Unused import
 // 
 // (To diagnose errors in synthetic code, try adding `// show` to the end of your input.)
-// middleware: org.http4s.server.AuthMiddleware[cats.effect.IO,AuthUser] = org.http4s.server.package$AuthMiddleware$$$Lambda$6294/1191670308@e3dff6e
+// middleware: org.http4s.server.AuthMiddleware[cats.effect.IO,AuthUser] = org.http4s.server.package$AuthMiddleware$$$Lambda$16149/806494556@1be9a83a
 
 val routes: AuthedRoutes[AuthUser, IO] = null
 // 
@@ -295,5 +292,5 @@ val securedRoutes: HttpRoutes[IO] = middleware(routes)
 // <synthetic>:13: warning: Unused import
 // 
 // (To diagnose errors in synthetic code, try adding `// show` to the end of your input.)
-// securedRoutes: org.http4s.HttpRoutes[cats.effect.IO] = Kleisli(org.http4s.server.package$AuthMiddleware$$$Lambda$6296/1575448323@69ee2689)
+// securedRoutes: org.http4s.HttpRoutes[cats.effect.IO] = Kleisli(org.http4s.server.package$AuthMiddleware$$$Lambda$16151/1364061769@230007bc)
 ```
