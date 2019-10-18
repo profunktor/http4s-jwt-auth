@@ -4,7 +4,7 @@ import Dependencies._
 import microsites.ExtraMdFileConfig
 
 ThisBuild / scalaVersion := "2.13.0"
-ThisBuild / version := "0.0.1"
+ThisBuild / version := "0.0.2"
 ThisBuild / organization := "dev.profunktor"
 ThisBuild / organizationName := "ProfunKtor"
 

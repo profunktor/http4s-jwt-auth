@@ -54,9 +54,10 @@ trait JwtFixture {
   def extractId(content: String): Long =
     Try(content.drop(1).dropRight(1).toLong).toOption.getOrElse(0L)
 
-  val authenticate: JwtClaim => IO[Option[AuthUser]] = claim =>
-    if (extractId(claim.content) == 123L) AuthUser(123L, "joe").some.pure[IO]
-    else none[AuthUser].pure[IO]
+  val authenticate: JwtToken => JwtClaim => IO[Option[AuthUser]] = _ =>
+    claim =>
+      if (extractId(claim.content) == 123L) AuthUser(123L, "joe").some.pure[IO]
+      else none[AuthUser].pure[IO]
 
   val jwtAuth    = JwtAuth(JwtSecretKey("53cr3t"), JwtAlgorithm.HS256)
   val middleware = JwtAuthMiddleware[IO, AuthUser](jwtAuth, authenticate)
