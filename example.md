@@ -184,7 +184,7 @@ val authenticate: JwtToken => JwtClaim => IO[Option[AuthUser]] =
 //          token => claim => AuthUser(123L, "joe").some.pure[IO]
 //                   ^
 // On line 3: warning: parameter value claim in anonymous function is never used
-// authenticate: dev.profunktor.auth.jwt.JwtToken => (pdi.jwt.JwtClaim => cats.effect.IO[Option[AuthUser]]) = $$Lambda$16140/749739683@1eb534d9
+// authenticate: dev.profunktor.auth.jwt.JwtToken => (pdi.jwt.JwtClaim => cats.effect.IO[Option[AuthUser]]) = $$Lambda$9730/1707676530@6f746ee7
 
 val jwtAuth    = JwtAuth(JwtSecretKey("53cr3t"), JwtAlgorithm.HS256)
 // 
@@ -238,7 +238,7 @@ val middleware = JwtAuthMiddleware[IO, AuthUser](jwtAuth, authenticate)
 // <synthetic>:16: warning: Unused import
 // 
 // (To diagnose errors in synthetic code, try adding `// show` to the end of your input.)
-// middleware: org.http4s.server.AuthMiddleware[cats.effect.IO,AuthUser] = org.http4s.server.package$AuthMiddleware$$$Lambda$16149/806494556@1be9a83a
+// middleware: org.http4s.server.AuthMiddleware[cats.effect.IO,AuthUser] = org.http4s.server.package$AuthMiddleware$$$Lambda$9742/1873558807@48bf2c31
 
 val routes: AuthedRoutes[AuthUser, IO] = null
 // 
@@ -292,5 +292,5 @@ val securedRoutes: HttpRoutes[IO] = middleware(routes)
 // <synthetic>:13: warning: Unused import
 // 
 // (To diagnose errors in synthetic code, try adding `// show` to the end of your input.)
-// securedRoutes: org.http4s.HttpRoutes[cats.effect.IO] = Kleisli(org.http4s.server.package$AuthMiddleware$$$Lambda$16151/1364061769@230007bc)
+// securedRoutes: org.http4s.HttpRoutes[cats.effect.IO] = Kleisli(org.http4s.server.package$AuthMiddleware$$$Lambda$9744/1638397749@78fe1b19)
 ```
