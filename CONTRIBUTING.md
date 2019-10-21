@@ -2,7 +2,7 @@
 
 We follow the standard GitHub [fork & pull](https://help.github.com/articles/using-pull-requests/#fork--pull) approach to pull requests. Just fork the official repo, develop in a branch, and submit a PR!
 
-You're always welcome to submit your PR straight away and start the discussion (without reading the rest of this wonderful doc, or the [`README.md`](README.md)). The goal of these notes is to make your experience contributing to fs2-redis as smooth and pleasant as possible. We're happy to guide you through the process once you've submitted your PR.
+You're always welcome to submit your PR straight away and start the discussion (without reading the rest of this wonderful doc, or the [`README.md`](README.md)). The goal of these notes is to make your experience contributing to http4s-jwt-auth as smooth and pleasant as possible. We're happy to guide you through the process once you've submitted your PR.
 
 ## Ticket Guidelines
 
@@ -20,7 +20,7 @@ You're always welcome to submit your PR straight away and start the discussion (
 	- have a meaningful commit message description
 	- comment important things
 	- include unit tests (positive and negative)
-	- pass [CI](https://app.codeship.com/projects/223399), which automatically runs when your pull request is submitted.
+	- pass [CI](https://circleci.com/gh/profunktor/http4s-jwt-auth), which automatically runs when your pull request is submitted.
 - **Be prepared to discuss/argue-for your changes if you want them merged**!
   You will probably need to refactor so your changes fit into the larger
   codebase
@@ -34,6 +34,6 @@ You're always welcome to submit your PR straight away and start the discussion (
   than 10 were tried without committing.
 - **Feel free to send Proof-Of-Concept PRs** that you don't intend to get merged.
 
-In case of any questions, don't hesitate to ask on our [gitter channel](https://gitter.im/fs2-redis/fs2-redis).
+In case of any questions, don't hesitate to ask on our [gitter channel](https://gitter.im/profunktor-dev/http4s-jwt-auth).
 
 (these guidelines have been adapted from https://github.com/scalameta/scalameta/blob/master/CONTRIBUTING.md)
