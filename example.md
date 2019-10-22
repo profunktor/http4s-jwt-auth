@@ -184,9 +184,9 @@ val authenticate: JwtToken => JwtClaim => IO[Option[AuthUser]] =
 //          token => claim => AuthUser(123L, "joe").some.pure[IO]
 //                   ^
 // On line 3: warning: parameter value claim in anonymous function is never used
-// authenticate: dev.profunktor.auth.jwt.JwtToken => (pdi.jwt.JwtClaim => cats.effect.IO[Option[AuthUser]]) = $$Lambda$9730/1707676530@6f746ee7
+// authenticate: dev.profunktor.auth.jwt.JwtToken => (pdi.jwt.JwtClaim => cats.effect.IO[Option[AuthUser]]) = $$Lambda$11176/401993450@727b359e
 
-val jwtAuth    = JwtAuth(JwtSecretKey("53cr3t"), JwtAlgorithm.HS256)
+val jwtAuth    = JwtAuth.hmac("53cr3t", JwtAlgorithm.HS256)
 // 
 //        import cats.effect.IO
 //                           ^
@@ -211,7 +211,7 @@ val jwtAuth    = JwtAuth(JwtSecretKey("53cr3t"), JwtAlgorithm.HS256)
 // <synthetic>:16: warning: Unused import
 // 
 // (To diagnose errors in synthetic code, try adding `// show` to the end of your input.)
-// jwtAuth: dev.profunktor.auth.jwt.JwtAuth = JwtAuth(JwtSecretKey(53cr3t),HS256)
+// jwtAuth: dev.profunktor.auth.jwt.JwtSymmetricAuth = JwtSymmetricAuth(JwtSecretKey(53cr3t),List(HS256))
 
 val middleware = JwtAuthMiddleware[IO, AuthUser](jwtAuth, authenticate)
 // 
@@ -238,7 +238,7 @@ val middleware = JwtAuthMiddleware[IO, AuthUser](jwtAuth, authenticate)
 // <synthetic>:16: warning: Unused import
 // 
 // (To diagnose errors in synthetic code, try adding `// show` to the end of your input.)
-// middleware: org.http4s.server.AuthMiddleware[cats.effect.IO,AuthUser] = org.http4s.server.package$AuthMiddleware$$$Lambda$9742/1873558807@48bf2c31
+// middleware: org.http4s.server.AuthMiddleware[cats.effect.IO,AuthUser] = org.http4s.server.package$AuthMiddleware$$$Lambda$11188/1630776015@2efb11b0
 
 val routes: AuthedRoutes[AuthUser, IO] = null
 // 
@@ -292,5 +292,5 @@ val securedRoutes: HttpRoutes[IO] = middleware(routes)
 // <synthetic>:13: warning: Unused import
 // 
 // (To diagnose errors in synthetic code, try adding `// show` to the end of your input.)
-// securedRoutes: org.http4s.HttpRoutes[cats.effect.IO] = Kleisli(org.http4s.server.package$AuthMiddleware$$$Lambda$9744/1638397749@78fe1b19)
+// securedRoutes: org.http4s.HttpRoutes[cats.effect.IO] = Kleisli(org.http4s.server.package$AuthMiddleware$$$Lambda$11190/452633870@3ad80a4b)
 ```
