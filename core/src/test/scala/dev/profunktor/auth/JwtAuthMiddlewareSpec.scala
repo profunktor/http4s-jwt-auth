@@ -4,10 +4,10 @@ import cats.data.OptionT
 import cats.effect.IO
 import cats.implicits._
 import org.http4s._
-import org.scalatest.AsyncFunSuite
 import org.scalatest.compatible.Assertion
 import scala.concurrent.Future
 import scala.util.Try
+import org.scalatest.funsuite.AsyncFunSuite
 
 class JwtAuthMiddlewareSpec extends AsyncFunSuite with JwtFixture {
 
