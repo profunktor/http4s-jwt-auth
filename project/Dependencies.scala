@@ -12,7 +12,7 @@ object Dependencies {
     val betterMonadicFor = "0.3.1"
     val kindProjector    = "0.10.3"
 
-    val scalaTest = "3.0.8"
+    val scalaTest = "3.1.0"
   }
 
   object Libraries {
