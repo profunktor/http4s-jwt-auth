@@ -18,7 +18,7 @@ object JwtAuthMiddleware {
     val dsl = new Http4sDsl[F] {}; import dsl._
 
     val onFailure: AuthedRoutes[String, F] =
-      Kleisli(req => OptionT.liftF(Forbidden(req.authInfo)))
+      Kleisli(req => OptionT.liftF(Forbidden(req.context)))
 
     val authUser: Kleisli[F, Request[F], Either[String, A]] =
       Kleisli { request =>
