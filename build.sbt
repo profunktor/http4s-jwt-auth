@@ -115,6 +115,7 @@ lazy val microsite = project
       "gray-lighter"    -> "#F4F3F4",
       "white-color"     -> "#FFFFFF"
     ),
+    micrositeExtraMdFilesOutput := (resourceManaged in Compile).value / "jekyll",
     micrositeGitterChannel := true,
     micrositeGitterChannelUrl := "profunktor-dev/http4s-jwt-auth",
     micrositePushSiteWith := GitHub4s,
