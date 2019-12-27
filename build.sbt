@@ -66,8 +66,8 @@ lazy val core = (project in file("core"))
   .settings(
     name := "http4s-jwt-auth",
     libraryDependencies ++= Seq(
-          compilerPlugin(Libraries.kindProjector),
-          compilerPlugin(Libraries.betterMonadicFor),
+          CompilerPlugins.kindProjector,
+          CompilerPlugins.betterMonadicFor,
           Libraries.cats,
           Libraries.catsEffect,
           Libraries.fs2,
