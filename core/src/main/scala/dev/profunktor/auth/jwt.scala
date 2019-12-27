@@ -13,9 +13,11 @@ object jwt {
   case class JwtPublicKey(value: String) extends AnyVal
 
   sealed trait JwtAuth
+  case object JwtNoValidation extends JwtAuth
   case class JwtSymmetricAuth(secretKey: JwtSecretKey, jwtAlgorithms: Seq[JwtHmacAlgorithm]) extends JwtAuth
   case class JwtAsymmetricAuth(publicKey: JwtPublicKey, jwtAlgorithms: Seq[JwtAsymmetricAlgorithm]) extends JwtAuth
   object JwtAuth {
+    def noValidation: JwtAuth = JwtNoValidation
     def hmac(secretKey: String, algorithm: JwtHmacAlgorithm): JwtSymmetricAuth =
       JwtSymmetricAuth(JwtSecretKey(secretKey), Seq(algorithm))
     def hmac(secretKey: String, algorithms: Seq[JwtHmacAlgorithm] = JwtAlgorithm.allHmac()): JwtSymmetricAuth =
@@ -37,6 +39,7 @@ object jwt {
       jwtAuth: JwtAuth
   ): F[JwtClaim] =
     (jwtAuth match {
+      case JwtNoValidation                          => Jwt.decode(jwtToken.value, JwtOptions.DEFAULT.copy(signature = false))
       case JwtSymmetricAuth(secretKey, algorithms)  => Jwt.decode(jwtToken.value, secretKey.value, algorithms)
       case JwtAsymmetricAuth(publicKey, algorithms) => Jwt.decode(jwtToken.value, publicKey.value, algorithms)
     }).liftTo[F]
