@@ -3,7 +3,6 @@ import com.scalapenos.sbt.prompt._
 import Dependencies._
 import microsites.ExtraMdFileConfig
 
-ThisBuild / scalaVersion := "2.13.0"
 ThisBuild / organization := "dev.profunktor"
 ThisBuild / organizationName := "ProfunKtor"
 
@@ -105,21 +104,19 @@ lazy val microsite = project
                 Map("title" -> "Code of Conduct")
               )
         ),
-    micrositePalette := Map(
-      "brand-primary"   -> "#0b6e50",
-      "brand-secondary" -> "#15382e",
-      "brand-tertiary"  -> "#080f0d",
-      "gray-dark"       -> "#453E46",
-      "gray"            -> "#837F84",
-      "gray-light"      -> "#E3E2E3",
-      "gray-lighter"    -> "#F4F3F4",
-      "white-color"     -> "#FFFFFF"
-    ),
     micrositeExtraMdFilesOutput := (resourceManaged in Compile).value / "jekyll",
     micrositeGitterChannel := true,
     micrositeGitterChannelUrl := "profunktor-dev/http4s-jwt-auth",
     micrositePushSiteWith := GitHub4s,
-    micrositeGithubToken := sys.env.get("GITHUB_TOKEN")
+    micrositeGithubToken := sys.env.get("GITHUB_TOKEN"),
+    scalacOptions --= Seq(
+          "-Werror",
+          "-Xfatal-warnings",
+          "-Ywarn-unused-import",
+          "-Ywarn-numeric-widen",
+          "-Ywarn-dead-code",
+          "-Xlint:-missing-interpolator,_"
+        )
   )
   .dependsOn(core)
 
