@@ -6,7 +6,7 @@ import microsites.ExtraMdFileConfig
 ThisBuild / organization := "dev.profunktor"
 ThisBuild / organizationName := "ProfunKtor"
 
-crossScalaVersions in ThisBuild := Seq("2.12.10", "2.13.0")
+crossScalaVersions in ThisBuild := Seq("2.12.10", "2.13.1")
 
 promptTheme := PromptTheme(
   List(
