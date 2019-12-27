@@ -118,17 +118,9 @@ lazy val microsite = project
     micrositeGitterChannel := true,
     micrositeGitterChannelUrl := "profunktor-dev/http4s-jwt-auth",
     micrositePushSiteWith := GitHub4s,
-    micrositeGithubToken := sys.env.get("GITHUB_TOKEN"),
-    fork in tut := true,
-    scalacOptions in Tut --= Seq(
-          "-Xfatal-warnings",
-          "-Ywarn-unused-import",
-          "-Ywarn-numeric-widen",
-          "-Ywarn-dead-code",
-          "-Xlint:-missing-interpolator,_"
-        )
+    micrositeGithubToken := sys.env.get("GITHUB_TOKEN")
   )
   .dependsOn(core)
 
 // CI build
-addCommandAlias("fullBuild", ";clean;+test;tut")
+addCommandAlias("fullBuild", ";clean;+test;mdoc")

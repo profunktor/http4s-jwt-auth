@@ -1,4 +1,4 @@
-```tut:book
+```scala mdoc:silent
 import cats.effect.IO
 import cats.implicits._
 import dev.profunktor.auth._
