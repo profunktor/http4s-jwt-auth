@@ -10,15 +10,17 @@ import pdi.jwt.algorithms.{JwtAsymmetricAlgorithm, JwtECDSAAlgorithm, JwtRSAAlgo
 
 import scala.util.Try
 
+final case class PKCS8(value: String) extends AnyVal
+
 final case class JwtPrivateKey(key: PrivateKey, algorithm: JwtAsymmetricAlgorithm)
 
 object JwtPrivateKey {
   def make[F[_]: ApplicativeError[*[_], Throwable]](
-      privateKey: String,
+      privateKey: PKCS8,
       algorithm: JwtAsymmetricAlgorithm): F[JwtPrivateKey] = {
     Try(algorithm match {
-      case _: JwtRSAAlgorithm => ParserKey.parsePrivateKey(privateKey, JwtUtils.RSA)
-      case _: JwtECDSAAlgorithm => ParserKey.parsePrivateKey(privateKey, JwtUtils.ECDSA)
+      case _: JwtRSAAlgorithm => ParserKey.parsePrivateKey(privateKey.value, JwtUtils.RSA)
+      case _: JwtECDSAAlgorithm => ParserKey.parsePrivateKey(privateKey.value, JwtUtils.ECDSA)
     }).liftTo[F].map(key => JwtPrivateKey(key, algorithm))
   }
 }
