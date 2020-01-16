@@ -1,18 +1,16 @@
 package dev.profunktor.auth
 
-import java.security.spec.InvalidKeySpecException
-import java.util.concurrent.TimeUnit
-
 import cats.effect.{Clock, IO}
 import cats.implicits._
 import dev.profunktor.auth.jwt.JwtAsymmetricAuth
+import java.security.spec.InvalidKeySpecException
+import java.util.concurrent.TimeUnit
 import org.scalatest.Assertion
 import org.scalatest.funsuite.AsyncFunSuite
 import org.scalatest.matchers.should.Matchers
 import pdi.jwt.exceptions.JwtValidationException
-
-import scala.reflect.ClassTag
 import pdi.jwt.{JwtAlgorithm, JwtClaim}
+import scala.reflect.ClassTag
 
 class AsymmetricKeysSpec extends AsyncFunSuite with Matchers {
 

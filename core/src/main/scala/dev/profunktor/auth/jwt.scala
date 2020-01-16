@@ -5,7 +5,6 @@ import cats.implicits._
 import pdi.jwt._
 import pdi.jwt.algorithms.JwtHmacAlgorithm
 
-import scala.util.Try
 
 object jwt {
 
@@ -44,10 +43,10 @@ object jwt {
   ): F[JwtToken] =
     JwtToken(Jwt.encode(jwtClaim, jwtSecretKey.value, jwtAlgorithm)).pure[F]
 
-  def jwtEncode[F[_]: ApplicativeError[*[_], Throwable]](
+  def jwtEncode[F[_]](
       jwtClaim: JwtClaim,
-      jwtPrivateKey: JwtPrivateKey,
+      jwtPrivateKey: JwtPrivateKey)(
+      implicit F: ApplicativeError[F, Throwable]
   ): F[JwtToken] =
-    Try(JwtToken(Jwt.encode(jwtClaim, jwtPrivateKey.key, jwtPrivateKey.algorithm))).liftTo[F]
-
+    F.catchNonFatal(JwtToken(Jwt.encode(jwtClaim, jwtPrivateKey.key, jwtPrivateKey.algorithm)))
 }
