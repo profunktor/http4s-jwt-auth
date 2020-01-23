@@ -5,7 +5,6 @@ import cats.implicits._
 import pdi.jwt._
 import pdi.jwt.algorithms.JwtHmacAlgorithm
 
-
 object jwt {
 
   case class JwtToken(value: String) extends AnyVal
@@ -31,9 +30,9 @@ object jwt {
       jwtAuth: JwtAuth
   ): F[JwtClaim] =
     (jwtAuth match {
-      case JwtNoValidation                          => Jwt.decode(jwtToken.value, JwtOptions.DEFAULT.copy(signature = false))
-      case JwtSymmetricAuth(secretKey, algorithms)  => Jwt.decode(jwtToken.value, secretKey.value, algorithms)
-      case JwtAsymmetricAuth(publicKey)             => Jwt.decode(jwtToken.value, publicKey.key, publicKey.algorithm)
+      case JwtNoValidation                         => Jwt.decode(jwtToken.value, JwtOptions.DEFAULT.copy(signature = false))
+      case JwtSymmetricAuth(secretKey, algorithms) => Jwt.decode(jwtToken.value, secretKey.value, algorithms)
+      case JwtAsymmetricAuth(publicKey)            => Jwt.decode(jwtToken.value, publicKey.key, publicKey.algorithm)
     }).liftTo[F]
 
   def jwtEncode[F[_]: Applicative](
@@ -43,9 +42,7 @@ object jwt {
   ): F[JwtToken] =
     JwtToken(Jwt.encode(jwtClaim, jwtSecretKey.value, jwtAlgorithm)).pure[F]
 
-  def jwtEncode[F[_]](
-      jwtClaim: JwtClaim,
-      jwtPrivateKey: JwtPrivateKey)(
+  def jwtEncode[F[_]](jwtClaim: JwtClaim, jwtPrivateKey: JwtPrivateKey)(
       implicit F: ApplicativeError[F, Throwable]
   ): F[JwtToken] =
     F.catchNonFatal(JwtToken(Jwt.encode(jwtClaim, jwtPrivateKey.key, jwtPrivateKey.algorithm)))
