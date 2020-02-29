@@ -42,6 +42,16 @@ val routes: AuthedRoutes[AuthUser, IO] = ???
 val securedRoutes: HttpRoutes[IO] = middleware(routes)
 ```
 
+### Build microsite
+
+If you only need `jekyll` for this, it is recommended to use `nix-shell` to avoid installing it globally:
+
+```
+nix-shell -p jekyll
+sbt makeMicrosite
+cd site/target/site && jekyll serve
+```
+
 ### Notes
 
 This library is quite opinionated, use with caution. Examples and docs coming soon!
