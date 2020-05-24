@@ -3,10 +3,22 @@ import com.scalapenos.sbt.prompt._
 import Dependencies._
 import microsites.ExtraMdFileConfig
 
-ThisBuild / organization := "dev.profunktor"
 ThisBuild / organizationName := "ProfunKtor"
+ThisBuild / crossScalaVersions := List("2.12.10", "2.13.2")
 
-crossScalaVersions in ThisBuild := Seq("2.12.10", "2.13.1")
+// publishing
+ThisBuild / name := """http4s-jwt-auth"""
+ThisBuild / organization := "dev.profunktor"
+ThisBuild / homepage := Some(url("https://http4s-jwt-auth.profunktor.dev/"))
+ThisBuild / licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0"))
+ThisBuild / developers := List(
+  Developer(
+    "gvolpe",
+    "Gabriel Volpe",
+    "volpegabriel@gmail.com",
+    url("https://gvolpe.github.io")
+  )
+)
 
 promptTheme := PromptTheme(
   List(
@@ -16,11 +28,11 @@ promptTheme := PromptTheme(
 )
 
 def maxClassFileName(v: String) = CrossVersion.partialVersion(v) match {
-  case Some((2, 13)) => Seq.empty[String]
-  case _             => Seq("-Xmax-classfile-name", "100")
+  case Some((2, 13)) => List.empty[String]
+  case _             => List("-Xmax-classfile-name", "100")
 }
 
-val commonSettings = Seq(
+val commonSettings = List(
   organizationName := "Opinionated JWT authentication library for Http4s",
   startYear := Some(2019),
   licenses += ("Apache-2.0", new URL("https://www.apache.org/licenses/LICENSE-2.0.txt")),
@@ -28,30 +40,10 @@ val commonSettings = Seq(
   headerLicense := Some(HeaderLicense.ALv2("2019", "ProfunKtor")),
   resolvers += "Apache public" at "https://repository.apache.org/content/groups/public/",
   scalacOptions ++= maxClassFileName(scalaVersion.value),
-  scalafmtOnCompile := true,
-  publishTo := {
-      val sonatype = "https://oss.sonatype.org/"
-      if (isSnapshot.value)
-        Some("snapshots" at sonatype + "content/repositories/snapshots")
-      else
-        Some("releases" at sonatype + "service/local/staging/deploy/maven2")
-    },
-  publishMavenStyle := true,
-  publishArtifact in Test := false,
-  pomIncludeRepository := { _ =>
-      false
-    },
-  pomExtra :=
-      <developers>
-        <developer>
-          <id>gvolpe</id>
-          <name>Gabriel Volpe</name>
-          <url>https://github.com/gvolpe</url>
-        </developer>
-      </developers>
+  scalafmtOnCompile := true
 )
 
-lazy val noPublish = Seq(
+lazy val noPublish = List(
   publish := {},
   publishLocal := {},
   publishArtifact := false,
@@ -65,7 +57,7 @@ lazy val root = (project in file("."))
 lazy val core = (project in file("core"))
   .settings(
     name := "http4s-jwt-auth",
-    libraryDependencies ++= Seq(
+    libraryDependencies ++= List(
           CompilerPlugins.kindProjector,
           CompilerPlugins.betterMonadicFor,
           Libraries.cats,
@@ -107,9 +99,7 @@ lazy val microsite = project
     micrositeExtraMdFilesOutput := (resourceManaged in Compile).value / "jekyll",
     micrositeGitterChannel := true,
     micrositeGitterChannelUrl := "profunktor-dev/http4s-jwt-auth",
-    micrositePushSiteWith := GitHub4s,
-    micrositeGithubToken := sys.env.get("GITHUB_TOKEN"),
-    scalacOptions --= Seq(
+    scalacOptions --= List(
           "-Werror",
           "-Xfatal-warnings",
           "-Ywarn-unused-import",
