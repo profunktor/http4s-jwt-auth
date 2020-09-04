@@ -1,7 +1,7 @@
 package dev.profunktor.auth
 
 import cats.effect.{ Clock, IO }
-import cats.implicits._
+import cats.syntax.all._
 import dev.profunktor.auth.jwt.JwtAsymmetricAuth
 import java.security.spec.InvalidKeySpecException
 import java.util.concurrent.TimeUnit

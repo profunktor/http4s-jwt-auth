@@ -1,7 +1,7 @@
 package dev.profunktor.auth
 
 import cats.ApplicativeError
-import cats.implicits._
+import cats.syntax.all._
 import java.security.{ KeyFactory, PrivateKey, PublicKey }
 import java.security.spec.{ PKCS8EncodedKeySpec, X509EncodedKeySpec }
 import pdi.jwt.algorithms.{ JwtAsymmetricAlgorithm, JwtECDSAAlgorithm, JwtRSAAlgorithm }

@@ -2,7 +2,7 @@ package dev.profunktor.auth
 
 import cats.MonadError
 import cats.data.{ Kleisli, OptionT }
-import cats.implicits._
+import cats.syntax.all._
 import jwt._
 import org.http4s.{ AuthedRoutes, Request }
 import org.http4s.dsl.Http4sDsl
