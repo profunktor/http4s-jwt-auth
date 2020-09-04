@@ -2,7 +2,7 @@ package dev.profunktor.auth
 
 import cats.data.OptionT
 import cats.effect.IO
-import cats.implicits._
+import cats.syntax.all._
 import org.http4s._
 import org.scalatest.compatible.Assertion
 import scala.concurrent.Future
