@@ -22,7 +22,7 @@ jobs:
           path: "~/.cache/coursier"
           restore-keys: coursier
       - name: "java ${{ matrix.java}} setup"
-        uses: "olafurpg/setup-java@v6"
+        uses: "olafurpg/setup-java@v10"
         with:
           java-version: "${{ matrix.java}}"
       - run: sbt fullBuild
