@@ -7,7 +7,7 @@ object Dependencies {
     val catsEffect = "2.3.3"
     val fs2        = "2.5.3"
     val http4s     = "0.21.20"
-    val jwt        = "5.0.0"
+    val jwt        = "6.0.0"
 
     val betterMonadicFor = "0.3.1"
     val kindProjector    = "0.11.3"
@@ -21,7 +21,7 @@ object Dependencies {
     val cats       = "org.typelevel" %% "cats-core"   % Versions.cats
     val catsEffect = "org.typelevel" %% "cats-effect" % Versions.catsEffect
     val fs2        = "co.fs2"        %% "fs2-core"    % Versions.fs2
-    val jwtCore    = "com.pauldijou" %% "jwt-core"    % Versions.jwt
+    val jwtCore    = "com.github.jwt-scala" %% "jwt-core"    % Versions.jwt
 
     val http4sDsl    = http4s("http4s-dsl")
     val http4sServer = http4s("http4s-blaze-server")
