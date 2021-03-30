@@ -1,24 +1,24 @@
 package dev.profunktor.auth
 
-import cats.effect.{ Clock, IO }
-import cats.syntax.all._
-import dev.profunktor.auth.jwt.JwtAsymmetricAuth
 import java.security.spec.InvalidKeySpecException
-import java.util.concurrent.TimeUnit
-import org.scalatest.Assertion
-import org.scalatest.funsuite.AsyncFunSuite
-import org.scalatest.matchers.should.Matchers
-import pdi.jwt.exceptions.JwtValidationException
-import pdi.jwt.{ JwtAlgorithm, JwtClaim }
+
 import scala.reflect.ClassTag
 
-class AsymmetricKeysSpec extends AsyncFunSuite with Matchers {
+import cats.effect.{ Clock, IO }
+import cats.effect.unsafe.implicits.global
+import cats.syntax.all._
+
+import dev.profunktor.auth.jwt.JwtAsymmetricAuth
+import munit.FunSuite
+import pdi.jwt.{ JwtAlgorithm, JwtClaim }
+
+class AsymmetricKeysSuite extends FunSuite {
 
   test("Build private key") {
     JwtPrivateKey
       .make[IO](privateKeyPKCS8, JwtAlgorithm.RS256)
       .attempt
-      .map(res => assertResult(JwtAlgorithm.RS256.asRight[Throwable])(res.map(_.algorithm)))
+      .map(res => assert(JwtAlgorithm.RS256.asRight[Throwable] == res.map(_.algorithm)))
       .unsafeToFuture()
   }
 
@@ -35,7 +35,7 @@ class AsymmetricKeysSpec extends AsyncFunSuite with Matchers {
     JwtPublicKey
       .rsa[IO](publicKey, Seq(JwtAlgorithm.RS256))
       .attempt
-      .map(res => assertResult(Seq(JwtAlgorithm.RS256).asRight[Throwable])(res.map(_.algorithm)))
+      .map(res => assert(Seq(JwtAlgorithm.RS256).asRight[Throwable] == res.map(_.algorithm)))
       .unsafeToFuture()
   }
 
@@ -56,7 +56,7 @@ class AsymmetricKeysSpec extends AsyncFunSuite with Matchers {
       jwtToken <- jwt.jwtEncode[IO](jwtClaim, privateKey)
       resultJwtClaim <- jwt.jwtDecode[IO](jwtToken, JwtAsymmetricAuth(publicKey))
     } yield {
-      assertResult(jwtClaim)(resultJwtClaim)
+      assertEquals(jwtClaim, resultJwtClaim)
     }
     assertionJwtClaim.unsafeToFuture()
   }
@@ -70,10 +70,10 @@ class AsymmetricKeysSpec extends AsyncFunSuite with Matchers {
       jwtToken <- jwt.jwtEncode[IO](jwtClaim, privateKey)
       _ <- jwt.jwtDecode[IO](jwtToken, JwtAsymmetricAuth(publicKey))
     } yield ()
-    assertionJwtClaim.attempt.map(assertThrow[JwtValidationException]).unsafeToFuture()
+    assertionJwtClaim.attempt.map(assertThrow[InvalidKeySpecException]).unsafeToFuture()
   }
 
-  private def assertThrow[E: ClassTag](errorOrResult: Either[Throwable, _]): Assertion = {
+  private def assertThrow[E: ClassTag](errorOrResult: Either[Throwable, _]) = {
     val isCorrectException = true
     val isOtherException   = false
     val isRightValue       = false
@@ -88,10 +88,7 @@ class AsymmetricKeysSpec extends AsyncFunSuite with Matchers {
   }
 
   private def createJwtClaim: IO[JwtClaim] =
-    Clock
-      .create[IO]
-      .realTime(TimeUnit.SECONDS)
-      .map(expiration => JwtClaim("{\"userId\":123}", expiration = (expiration + 1000).some))
+    Clock[IO].realTime.map(x => JwtClaim("{\"userId\":123}", expiration = Some(x.toSeconds + 2000)))
 
   private def privateKeyPKCS8: PKCS8 =
     PKCS8(

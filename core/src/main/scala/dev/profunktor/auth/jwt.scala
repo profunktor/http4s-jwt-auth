@@ -25,7 +25,7 @@ object jwt {
 
   // ----- Common JWT Functions -----
 
-  def jwtDecode[F[_]: ApplicativeError[*[_], Throwable]](
+  def jwtDecode[F[_]: ApplicativeThrow](
       jwtToken: JwtToken,
       jwtAuth: JwtAuth
   ): F[JwtClaim] =
