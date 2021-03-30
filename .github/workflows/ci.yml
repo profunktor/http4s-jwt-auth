@@ -1,9 +1,16 @@
+name: Scala
+on:
+  pull_request: {}
+  push:
+    branches:
+      - master
+
 jobs:
   build:
     name: Build
     runs-on: ubuntu-18.04
     steps:
-      - uses: "actions/checkout@v2.1.0"
+      - uses: actions/checkout@v2.1.0
       - run: |
           shasum build.sbt \
             project/plugins.sbt \
@@ -22,7 +29,7 @@ jobs:
           path: "~/.cache/coursier"
           restore-keys: coursier
       - name: "java ${{ matrix.java}} setup"
-        uses: "olafurpg/setup-java@v10"
+        uses: olafurpg/setup-java@v10
         with:
           java-version: "${{ matrix.java}}"
       - run: sbt fullBuild
@@ -30,9 +37,3 @@ jobs:
       matrix:
         java:
           - '8.0.242'
-name: Scala
-on:
-  pull_request: {}
-  push:
-    branches:
-      - master

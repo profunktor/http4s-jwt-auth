@@ -4,7 +4,7 @@ import Dependencies._
 import microsites.ExtraMdFileConfig
 
 ThisBuild / organizationName := "ProfunKtor"
-ThisBuild / crossScalaVersions := List("2.12.10", "2.13.2")
+ThisBuild / crossScalaVersions := List("2.12.12", "2.13.5")
 
 // publishing
 ThisBuild / name := """http4s-jwt-auth"""
@@ -40,7 +40,8 @@ val commonSettings = List(
   headerLicense := Some(HeaderLicense.ALv2("2019", "ProfunKtor")),
   resolvers += "Apache public" at "https://repository.apache.org/content/groups/public/",
   scalacOptions ++= maxClassFileName(scalaVersion.value),
-  scalafmtOnCompile := true
+  scalafmtOnCompile := true,
+  testFrameworks += new TestFramework("munit.Framework")
 )
 
 lazy val noPublish = List(
@@ -66,7 +67,7 @@ lazy val core = (project in file("core"))
           Libraries.http4sDsl,
           Libraries.http4sServer,
           Libraries.jwtCore,
-          Libraries.scalaTest % Test
+          Libraries.munit % Test
         )
   )
   .settings(commonSettings: _*)

@@ -1,20 +1,21 @@
 package dev.profunktor.auth
 
+import scala.util.Try
+
 import cats.data.OptionT
 import cats.effect.IO
+import cats.effect.unsafe.implicits.global
 import cats.syntax.all._
+
+import munit.FunSuite
 import org.http4s._
-import org.scalatest.compatible.Assertion
-import scala.concurrent.Future
-import scala.util.Try
-import org.scalatest.funsuite.AsyncFunSuite
 
-class JwtAuthMiddlewareSpec extends AsyncFunSuite with JwtFixture {
+class JwtAuthMiddlewareSpec extends FunSuite with JwtFixture {
 
-  private def assertResp(response: OptionT[IO, Response[IO]], expected: Status): Future[Assertion] =
+  private def assertResp(response: OptionT[IO, Response[IO]], expected: Status) =
     response.value
       .map {
-        case Some(resp) => assert(resp.status == expected)
+        case Some(resp) => assertEquals(resp.status, expected)
         case None       => fail("No response")
       }
       .unsafeToFuture()
@@ -68,9 +69,10 @@ trait JwtFixture {
 
   val rootReq         = Request[IO](Method.GET, Uri.unsafeFromString("/"))
   val adminReqNoToken = Request[IO](Method.GET, Uri.unsafeFromString("/admin"))
-  val badAdminReq     = adminReqNoToken.withHeaders(Header("Authorization", s"Bearer $randomToken"))
-  val goodAdminReq    = adminReqNoToken.withHeaders(Header("Authorization", s"Bearer $adminToken"))
-  val noUserAdminReq  = adminReqNoToken.withHeaders(Header("Authorization", s"Bearer $noUserToken"))
+  val badAdminReq     = adminReqNoToken.withHeaders(Header.ToRaw.keyValuesToRaw("Authorization" -> s"Bearer $randomToken"))
+  val goodAdminReq    = adminReqNoToken.withHeaders(Header.ToRaw.keyValuesToRaw("Authorization" -> s"Bearer $adminToken"))
+  val noUserAdminReq =
+    adminReqNoToken.withHeaders(Header.ToRaw.keyValuesToRaw("Authorization" -> s"Bearer $noUserToken"))
 
   val openRoute: HttpRoutes[IO] = HttpRoutes.of {
     case GET -> Root => Ok()

@@ -1,6 +1,6 @@
 package dev.profunktor.auth
 
-import cats.MonadError
+import cats.MonadThrow
 import cats.data.{ Kleisli, OptionT }
 import cats.syntax.all._
 import jwt._
@@ -11,7 +11,7 @@ import pdi.jwt._
 import pdi.jwt.exceptions.JwtException
 
 object JwtAuthMiddleware {
-  def apply[F[_]: MonadError[*[_], Throwable], A](
+  def apply[F[_]: MonadThrow, A](
       jwtAuth: JwtAuth,
       authenticate: JwtToken => JwtClaim => F[Option[A]]
   ): AuthMiddleware[F, A] = {
