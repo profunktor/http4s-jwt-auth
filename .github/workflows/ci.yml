@@ -22,8 +22,5 @@ jobs:
       - name: "Install Nix ❄️"
         uses: cachix/install-nix-action@v12
 
-      - name: "Install Cachix ❄️"
-        uses: cachix/cachix-action@v8
-
       - name: "Run with ${{ matrix.java }} 🚀"
         run: nix-shell --argstr java "${{ matrix.java }}" --run "sbt ++ 'test;mdoc'"
