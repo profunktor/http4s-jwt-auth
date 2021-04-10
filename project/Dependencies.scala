@@ -6,7 +6,7 @@ object Dependencies {
     val cats       = "2.5.0"
     val catsEffect = "3.0.1"
     val fs2        = "3.0.1"
-    val http4s     = "1.0.0-M20"
+    val http4s     = "1.0.0-M21"
     val jwt        = "7.1.3"
 
     val betterMonadicFor = "0.3.1"
