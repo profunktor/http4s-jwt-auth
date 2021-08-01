@@ -48,7 +48,7 @@ lazy val noPublish = List(
   publish := {},
   publishLocal := {},
   publishArtifact := false,
-  skip in publish := true
+  publish / skip := true
 )
 
 lazy val root = (project in file("."))
@@ -97,7 +97,7 @@ lazy val microsite = project
                 Map("title" -> "Code of Conduct")
               )
         ),
-    micrositeExtraMdFilesOutput := (resourceManaged in Compile).value / "jekyll",
+    micrositeExtraMdFilesOutput := (Compile / resourceManaged).value / "jekyll",
     micrositeGitterChannel := true,
     micrositeGitterChannelUrl := "profunktor-dev/http4s-jwt-auth",
     scalacOptions --= List(
