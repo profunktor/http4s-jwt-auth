@@ -6,7 +6,7 @@ object Dependencies {
     val cats       = "2.6.1"
     val catsEffect = "3.2.1"
     val fs2        = "3.0.6"
-    val http4s     = "1.0.0-M23"
+    val http4s     = "0.23.0"
     val jwt        = "8.0.3"
 
     val betterMonadicFor = "0.3.1"
@@ -18,16 +18,16 @@ object Dependencies {
   object Libraries {
     def http4s(artifact: String): ModuleID = "org.http4s" %% artifact % V.http4s
 
-    val cats       = "org.typelevel" %% "cats-core"   % V.cats
-    val catsEffect = "org.typelevel" %% "cats-effect" % V.catsEffect
-    val fs2        = "co.fs2"        %% "fs2-core"    % V.fs2
+    val cats       = "org.typelevel"        %% "cats-core"   % V.cats
+    val catsEffect = "org.typelevel"        %% "cats-effect" % V.catsEffect
+    val fs2        = "co.fs2"               %% "fs2-core"    % V.fs2
     val jwtCore    = "com.github.jwt-scala" %% "jwt-core"    % V.jwt
 
     val http4sDsl    = http4s("http4s-dsl")
-    val http4sServer = http4s("http4s-blaze-server")
+    val http4sServer = http4s("http4s-server")
 
     // Test
-    val munit =     "org.scalameta"                %% "munit"                          % V.munit
+    val munit = "org.scalameta" %% "munit" % V.munit
   }
 
   object CompilerPlugins {
