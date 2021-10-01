@@ -1,7 +1,7 @@
 package dev.profunktor.auth
 
-import jwt._
-import org.http4s._
+import jwt.*
+import org.http4s.*
 import org.http4s.Credentials.Token
 import org.http4s.headers.Authorization
 

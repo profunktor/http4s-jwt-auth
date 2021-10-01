@@ -1,8 +1,8 @@
 package dev.profunktor.auth
 
-import cats._
-import cats.syntax.all._
-import pdi.jwt._
+import cats.*
+import cats.syntax.all.*
+import pdi.jwt.*
 import pdi.jwt.algorithms.JwtHmacAlgorithm
 
 object jwt {

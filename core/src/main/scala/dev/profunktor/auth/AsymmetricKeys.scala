@@ -1,10 +1,10 @@
 package dev.profunktor.auth
 
 import cats.ApplicativeThrow
-import cats.syntax.all._
+import cats.syntax.all.*
 import java.security.{ KeyFactory, PrivateKey, PublicKey }
 import java.security.spec.{ PKCS8EncodedKeySpec, X509EncodedKeySpec }
-import pdi.jwt.algorithms._
+import pdi.jwt.algorithms.*
 import pdi.jwt.{ JwtBase64, JwtUtils }
 
 final case class PKCS8(value: String) extends AnyVal

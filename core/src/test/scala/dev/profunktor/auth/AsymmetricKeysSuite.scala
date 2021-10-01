@@ -2,11 +2,9 @@ package dev.profunktor.auth
 
 import java.security.spec.InvalidKeySpecException
 
-import scala.reflect.ClassTag
-
 import cats.effect.{ Clock, IO }
 import cats.effect.unsafe.implicits.global
-import cats.syntax.all._
+import cats.syntax.all.*
 
 import dev.profunktor.auth.jwt.JwtAsymmetricAuth
 import munit.FunSuite
@@ -27,7 +25,7 @@ class AsymmetricKeysSuite extends FunSuite {
     JwtPrivateKey
       .make[IO](encodedPrivateKey, JwtAlgorithm.RS256)
       .attempt
-      .map(assertThrow[InvalidKeySpecException])
+      .map(assertThrowInvalidKeySpecException)
       .unsafeToFuture()
   }
 
@@ -44,7 +42,7 @@ class AsymmetricKeysSuite extends FunSuite {
     JwtPublicKey
       .rsa[IO](encodedPublicKey, Seq(JwtAlgorithm.RS256))
       .attempt
-      .map(assertThrow[InvalidKeySpecException])
+      .map(assertThrowInvalidKeySpecException)
       .unsafeToFuture()
   }
 
@@ -70,18 +68,22 @@ class AsymmetricKeysSuite extends FunSuite {
       jwtToken <- jwt.jwtEncode[IO](jwtClaim, privateKey)
       _ <- jwt.jwtDecode[IO](jwtToken, JwtAsymmetricAuth(publicKey))
     } yield ()
-    assertionJwtClaim.attempt.map(assertThrow[InvalidKeySpecException]).unsafeToFuture()
+    assertionJwtClaim.attempt.map(assertThrowInvalidKeySpecException).unsafeToFuture()
   }
 
-  private def assertThrow[E: ClassTag](errorOrResult: Either[Throwable, _]) = {
+  private def assertThrowInvalidKeySpecException(errorOrResult: Either[Throwable, ?]) =
+    assertThrow(errorOrResult, { case e: InvalidKeySpecException => e })
+
+  private def assertThrow[E](errorOrResult: Either[Throwable, ?], exceptionTest: PartialFunction[Throwable, E]) = {
     val isCorrectException = true
     val isOtherException   = false
     val isRightValue       = false
     errorOrResult.fold(
-      {
-        case _: E => assert(isCorrectException)
-        case _    => assert(isOtherException)
-      },
+      exceptionTest
+        .lift(_)
+        .fold(
+          assert(isOtherException)
+        )(_ => assert(isCorrectException)),
       _ => assert(isRightValue)
     )
 
