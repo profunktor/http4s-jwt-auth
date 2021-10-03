@@ -5,10 +5,10 @@ import scala.util.Try
 import cats.data.OptionT
 import cats.effect.IO
 import cats.effect.unsafe.implicits.global
-import cats.syntax.all._
+import cats.syntax.all.*
 
 import munit.FunSuite
-import org.http4s._
+import org.http4s.*
 
 class JwtAuthMiddlewareSpec extends FunSuite with JwtFixture {
 
@@ -46,9 +46,9 @@ class JwtAuthMiddlewareSpec extends FunSuite with JwtFixture {
 object TestUsers {}
 
 trait JwtFixture {
-  import dev.profunktor.auth.jwt._
-  import org.http4s.dsl.io._
-  import pdi.jwt._
+  import dev.profunktor.auth.jwt.*
+  import org.http4s.dsl.io.*
+  import pdi.jwt.*
 
   case class AuthUser(id: Long, name: String)
 

@@ -2,12 +2,12 @@ package dev.profunktor.auth
 
 import cats.MonadThrow
 import cats.data.{ Kleisli, OptionT }
-import cats.syntax.all._
-import jwt._
+import cats.syntax.all.*
+import jwt.*
 import org.http4s.{ AuthedRoutes, Request }
 import org.http4s.dsl.Http4sDsl
 import org.http4s.server.AuthMiddleware
-import pdi.jwt._
+import pdi.jwt.*
 import pdi.jwt.exceptions.JwtException
 
 object JwtAuthMiddleware {
@@ -15,7 +15,7 @@ object JwtAuthMiddleware {
       jwtAuth: JwtAuth,
       authenticate: JwtToken => JwtClaim => F[Option[A]]
   ): AuthMiddleware[F, A] = {
-    val dsl = new Http4sDsl[F] {}; import dsl._
+    val dsl = new Http4sDsl[F] {}; import dsl.*
 
     val onFailure: AuthedRoutes[String, F] =
       Kleisli(req => OptionT.liftF(Forbidden(req.context)))

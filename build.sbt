@@ -4,7 +4,7 @@ import Dependencies._
 import microsites.ExtraMdFileConfig
 
 ThisBuild / organizationName := "ProfunKtor"
-ThisBuild / crossScalaVersions := List("2.12.15", "2.13.6")
+ThisBuild / crossScalaVersions := List("2.12.15", "2.13.6", "3.0.2")
 
 // publishing
 ThisBuild / name := """http4s-jwt-auth"""
@@ -28,8 +28,18 @@ promptTheme := PromptTheme(
 )
 
 def maxClassFileName(v: String) = CrossVersion.partialVersion(v) match {
-  case Some((2, 13)) => List.empty[String]
-  case _             => List("-Xmax-classfile-name", "100")
+  case Some((2, 13)) | Some((3, _)) => List.empty[String]
+  case _                            => List("-Xmax-classfile-name", "100")
+}
+
+def scalacVaryingOptions(scalaVersion: String) = CrossVersion.partialVersion(scalaVersion) match {
+  case Some((3, _)) => List("-source:future")
+  case _            => List("-Xsource:3")
+}
+
+def compilerPlugins(scalaVersion: String) = CrossVersion.partialVersion(scalaVersion) match {
+  case Some((3, _)) => List()
+  case _            => List(CompilerPlugins.kindProjector, CompilerPlugins.betterMonadicFor)
 }
 
 val commonSettings = List(
@@ -58,17 +68,18 @@ lazy val root = (project in file("."))
 lazy val core = (project in file("core"))
   .settings(
     name := "http4s-jwt-auth",
-    libraryDependencies ++= List(
-          CompilerPlugins.kindProjector,
-          CompilerPlugins.betterMonadicFor,
-          Libraries.cats,
-          Libraries.catsEffect,
-          Libraries.fs2,
-          Libraries.http4sDsl,
-          Libraries.http4sServer,
-          Libraries.jwtCore,
-          Libraries.munit % Test
-        )
+    scalacOptions ++= scalacVaryingOptions(scalaVersion.value),
+    libraryDependencies ++=
+        compilerPlugins(scalaVersion.value) :::
+            List(
+              Libraries.cats,
+              Libraries.catsEffect,
+              Libraries.fs2,
+              Libraries.http4sDsl,
+              Libraries.http4sServer,
+              Libraries.jwtCore,
+              Libraries.munit % Test
+            )
   )
   .settings(commonSettings: _*)
 
