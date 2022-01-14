@@ -4,7 +4,7 @@ import Dependencies._
 import microsites.ExtraMdFileConfig
 
 ThisBuild / organizationName := "ProfunKtor"
-ThisBuild / crossScalaVersions := List("2.12.15", "2.13.7", "3.1.0")
+ThisBuild / crossScalaVersions := List("2.12.15", "2.13.8", "3.1.0")
 
 // publishing
 ThisBuild / name := """http4s-jwt-auth"""
