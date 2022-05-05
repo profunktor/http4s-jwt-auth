@@ -10,6 +10,7 @@ import cats.syntax.all.*
 import munit.FunSuite
 import org.http4s.*
 
+
 class JwtAuthMiddlewareSpec extends FunSuite with JwtFixture {
 
   private def assertResp(response: OptionT[IO, Response[IO]], expected: Status) =
@@ -55,10 +56,10 @@ trait JwtFixture {
   def extractId(content: String): Long =
     Try(content.drop(1).dropRight(1).toLong).toOption.getOrElse(0L)
 
-  val authenticate: JwtToken => JwtClaim => IO[Option[AuthUser]] = _ =>
-    claim =>
-      if (extractId(claim.content) == 123L) AuthUser(123L, "joe").some.pure[IO]
-      else none[AuthUser].pure[IO]
+  val authenticate: JwtToken => IO[Option[AuthUser]] = token => jwtDecode[IO](token, jwtAuth).flatMap { claim =>
+    if (extractId(claim.content) == 123L) AuthUser(123L, "joe").some.pure[IO]
+    else none[AuthUser].pure[IO]
+  }
 
   val jwtAuth    = JwtAuth.hmac("53cr3t", JwtAlgorithm.HS256)
   val middleware = JwtAuthMiddleware[IO, AuthUser](jwtAuth, authenticate)

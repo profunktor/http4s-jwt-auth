@@ -13,7 +13,7 @@ import pdi.jwt.exceptions.JwtException
 object JwtAuthMiddleware {
   def apply[F[_]: MonadThrow, A](
       jwtAuth: JwtAuth,
-      authenticate: JwtToken => JwtClaim => F[Option[A]]
+      authenticate: JwtToken => F[Option[A]]
   ): AuthMiddleware[F, A] = {
     val dsl = new Http4sDsl[F] {}; import dsl.*
 
@@ -24,7 +24,7 @@ object JwtAuthMiddleware {
       Kleisli { request =>
         AuthHeaders.getBearerToken(request).fold("Bearer token not found".asLeft[A].pure[F]) { token =>
           jwtDecode[F](token, jwtAuth)
-            .flatMap(authenticate(token))
+            .flatMap(factorAuthenticateFunction(authenticate, token))
             .map(_.fold("not found".asLeft[A])(_.asRight[String]))
             .recover {
               case _: JwtException => "Invalid access token".asLeft[A]
@@ -34,4 +34,10 @@ object JwtAuthMiddleware {
 
     AuthMiddleware(authUser, onFailure)
   }
+
+  def factorAuthenticateFunction[F[_]: MonadThrow, A](
+      authenticate: JwtToken => F[Option[A]],
+      token: JwtToken
+  ): JwtClaim => F[Option[A]] = _ => authenticate(token)
+
 }
