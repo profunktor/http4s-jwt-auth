@@ -14,6 +14,12 @@ object JwtAuthMiddleware {
   def apply[F[_]: MonadThrow, A](
       jwtAuth: JwtAuth,
       authenticate: JwtToken => JwtClaim => F[Option[A]]
+  ): AuthMiddleware[F, A] =
+    apply(jwtAuth.pure, authenticate)
+
+  def apply[F[_]: MonadThrow, A](
+      jwtAuth: F[JwtAuth],
+      authenticate: JwtToken => JwtClaim => F[Option[A]]
   ): AuthMiddleware[F, A] = {
     val dsl = new Http4sDsl[F] {}; import dsl.*
 
@@ -23,15 +29,16 @@ object JwtAuthMiddleware {
     val authUser: Kleisli[F, Request[F], Either[String, A]] =
       Kleisli { request =>
         AuthHeaders.getBearerToken(request).fold("Bearer token not found".asLeft[A].pure[F]) { token =>
-          jwtDecode[F](token, jwtAuth)
-            .flatMap(authenticate(token))
-            .map(_.fold("not found".asLeft[A])(_.asRight[String]))
-            .recover {
-              case _: JwtException => "Invalid access token".asLeft[A]
-            }
+          jwtAuth.flatMap(auth =>
+            jwtDecode[F](token, auth)
+              .flatMap(authenticate(token))
+              .map(_.fold("not found".asLeft[A])(_.asRight[String]))
+              .recover {
+                case _: JwtException => "Invalid access token".asLeft[A]
+              }
+          )
         }
       }
-
     AuthMiddleware(authUser, onFailure)
   }
 }
