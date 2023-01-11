@@ -1,14 +1,14 @@
 package dev.profunktor.auth
 
 import scala.util.Try
-
 import cats.data.OptionT
 import cats.effect.IO
 import cats.effect.unsafe.implicits.global
 import cats.syntax.all.*
-
 import munit.FunSuite
 import org.http4s.*
+
+import scala.util.control.NoStackTrace
 
 class JwtAuthMiddlewareSpec extends FunSuite with JwtFixture {
 
@@ -39,6 +39,25 @@ class JwtAuthMiddlewareSpec extends FunSuite with JwtFixture {
 
   test("Admin route gives 403 when the token is valid but the user cannot be found") {
     assertResp(middleware(adminRoute).run(noUserAdminReq), Status.Forbidden)
+  }
+
+  test("Admin Route gives 200 when there's a valid token and secret is fetched via F[_]") {
+    val middleware = JwtAuthMiddleware[IO, AuthUser](IO.pure(jwtAuth), authenticate)
+    assertResp(middleware(adminRoute).run(goodAdminReq), Status.Ok)
+  }
+
+  test("Admin Route fails when secret fetching via F[_] fails") {
+    val exception = new Exception("key fetching failed") with NoStackTrace
+    val middleware = JwtAuthMiddleware[IO, AuthUser](
+      IO.raiseError(exception),
+      authenticate
+    )
+    middleware(adminRoute)
+      .run(goodAdminReq)
+      .value
+      .attempt
+      .map(response => assertEquals(response, Left(exception)))
+      .unsafeToFuture()
   }
 
 }
