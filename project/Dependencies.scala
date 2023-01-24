@@ -3,11 +3,11 @@ import sbt._
 object Dependencies {
 
   object V {
-    val cats       = "2.7.0"
-    val catsEffect = "3.3.12"
-    val fs2        = "3.2.7"
-    val http4s     = "0.23.12"
-    val jwt        = "9.0.5"
+    val cats       = "2.9.0"
+    val catsEffect = "3.4.5"
+    val fs2        = "3.5.0"
+    val http4s     = "0.23.18"
+    val jwt        = "9.1.2"
 
     val betterMonadicFor = "0.3.1"
     val kindProjector    = "0.13.2"

@@ -1,10 +1,8 @@
-import com.scalapenos.sbt.prompt.SbtPrompt.autoImport._
-import com.scalapenos.sbt.prompt._
 import Dependencies._
 import microsites.ExtraMdFileConfig
 
 ThisBuild / organizationName := "ProfunKtor"
-ThisBuild / crossScalaVersions := List("2.12.15", "2.13.8", "3.1.2")
+ThisBuild / crossScalaVersions := List("2.12.17", "2.13.10", "3.2.1")
 
 // publishing
 ThisBuild / name := """http4s-jwt-auth"""
@@ -17,13 +15,6 @@ ThisBuild / developers := List(
     "Gabriel Volpe",
     "volpegabriel@gmail.com",
     url("https://gvolpe.github.io")
-  )
-)
-
-promptTheme := PromptTheme(
-  List(
-    text("[sbt] ", fg(105)),
-    text(_ => "http4s-jwt-auth", fg(15)).padRight(" λ ")
   )
 )
 
