@@ -9,18 +9,19 @@ on:
 jobs:
   build:
     name: Publish
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2.1.0
-      - name: java 11 setup
-        uses: olafurpg/setup-java@v10
+      - uses: actions/checkout@v2.3.2
         with:
-          java-version: '11'
-      - uses: olafurpg/setup-gpg@v3
-      - env:
+          fetch-depth: 0 # fetch all branches & tags
+
+      - name: "Install Nix ❄️"
+        uses: cachix/install-nix-action@v18
+
+      - name: "Publish ${{ github.ref }} 🚀"
+        env:
           PGP_PASSPHRASE: "${{ secrets.PGP_PASSPHRASE }}"
           PGP_SECRET: "${{ secrets.PGP_SECRET }}"
           SONATYPE_PASSWORD: "${{ secrets.SONATYPE_PASSWORD }}"
           SONATYPE_USERNAME: "${{ secrets.SONATYPE_USERNAME }}"
-        name: "Publish ${{ github.ref }}"
-        run: sbt ci-release
+        run: nix develop -c sbt ci-release
