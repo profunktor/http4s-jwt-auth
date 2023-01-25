@@ -19,4 +19,4 @@ jobs:
         uses: cachix/install-nix-action@v18
 
       - name: "Run with ${{ matrix.java }} 🚀"
-        run: nix develop -c sbt '++test;mdoc'
+        run: nix develop -c sbt 'clean;mdoc;++test'
