@@ -4,7 +4,7 @@ import Dependencies._
 import microsites.ExtraMdFileConfig
 
 ThisBuild / organizationName := "ProfunKtor"
-ThisBuild / crossScalaVersions := List("2.12.15", "2.13.8", "3.1.2")
+ThisBuild / crossScalaVersions := List("2.12.15", "2.13.8", "3.2.2")
 
 // publishing
 ThisBuild / name := """http4s-jwt-auth"""
@@ -16,7 +16,7 @@ ThisBuild / developers := List(
     "gvolpe",
     "Gabriel Volpe",
     "volpegabriel@gmail.com",
-    url("https://gvolpe.github.io")
+    url("https://gvolpe.com")
   )
 )
 
