@@ -30,7 +30,7 @@ object jwt {
       jwtAuth: JwtAuth
   ): F[JwtClaim] =
     (jwtAuth match {
-      case JwtNoValidation                         => Jwt.decode(jwtToken.value, JwtOptions.DEFAULT.copy(signature = false))
+      case JwtNoValidation => Jwt.decode(jwtToken.value, JwtOptions.DEFAULT.copy(signature = false))
       case JwtSymmetricAuth(secretKey, algorithms) => Jwt.decode(jwtToken.value, secretKey.value, algorithms)
       case JwtAsymmetricAuth(publicKey)            => Jwt.decode(jwtToken.value, publicKey.key, publicKey.algorithm)
     }).liftTo[F]
@@ -42,8 +42,8 @@ object jwt {
   ): F[JwtToken] =
     JwtToken(Jwt.encode(jwtClaim, jwtSecretKey.value, jwtAlgorithm)).pure[F]
 
-  def jwtEncode[F[_]](jwtClaim: JwtClaim, jwtPrivateKey: JwtPrivateKey)(
-      implicit F: ApplicativeError[F, Throwable]
+  def jwtEncode[F[_]](jwtClaim: JwtClaim, jwtPrivateKey: JwtPrivateKey)(implicit
+      F: ApplicativeError[F, Throwable]
   ): F[JwtToken] =
     F.catchNonFatal(JwtToken(Jwt.encode(jwtClaim, jwtPrivateKey.key, jwtPrivateKey.algorithm)))
 }

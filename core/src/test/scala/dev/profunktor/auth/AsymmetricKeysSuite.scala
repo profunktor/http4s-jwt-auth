@@ -53,9 +53,7 @@ class AsymmetricKeysSuite extends FunSuite {
       publicKey <- JwtPublicKey.rsa[IO](publicKey, Seq(JwtAlgorithm.RS256, JwtAlgorithm.RS512))
       jwtToken <- jwt.jwtEncode[IO](jwtClaim, privateKey)
       resultJwtClaim <- jwt.jwtDecode[IO](jwtToken, JwtAsymmetricAuth(publicKey))
-    } yield {
-      assertEquals(jwtClaim, resultJwtClaim)
-    }
+    } yield assertEquals(jwtClaim, resultJwtClaim)
     assertionJwtClaim.unsafeToFuture()
   }
 
