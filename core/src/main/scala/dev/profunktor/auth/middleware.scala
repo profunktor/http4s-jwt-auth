@@ -33,8 +33,8 @@ object JwtAuthMiddleware {
             jwtDecode[F](token, auth)
               .flatMap(authenticate(token))
               .map(_.fold("not found".asLeft[A])(_.asRight[String]))
-              .recover {
-                case _: JwtException => "Invalid access token".asLeft[A]
+              .recover { case _: JwtException =>
+                "Invalid access token".asLeft[A]
               }
           )
         }

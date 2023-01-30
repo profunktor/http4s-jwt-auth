@@ -88,16 +88,16 @@ trait JwtFixture {
 
   val rootReq         = Request[IO](Method.GET, Uri.unsafeFromString("/"))
   val adminReqNoToken = Request[IO](Method.GET, Uri.unsafeFromString("/admin"))
-  val badAdminReq     = adminReqNoToken.withHeaders(Header.ToRaw.keyValuesToRaw("Authorization" -> s"Bearer $randomToken"))
-  val goodAdminReq    = adminReqNoToken.withHeaders(Header.ToRaw.keyValuesToRaw("Authorization" -> s"Bearer $adminToken"))
+  val badAdminReq  = adminReqNoToken.withHeaders(Header.ToRaw.keyValuesToRaw("Authorization" -> s"Bearer $randomToken"))
+  val goodAdminReq = adminReqNoToken.withHeaders(Header.ToRaw.keyValuesToRaw("Authorization" -> s"Bearer $adminToken"))
   val noUserAdminReq =
     adminReqNoToken.withHeaders(Header.ToRaw.keyValuesToRaw("Authorization" -> s"Bearer $noUserToken"))
 
-  val openRoute: HttpRoutes[IO] = HttpRoutes.of {
-    case GET -> Root => Ok()
+  val openRoute: HttpRoutes[IO] = HttpRoutes.of { case GET -> Root =>
+    Ok()
   }
 
-  val adminRoute: AuthedRoutes[AuthUser, IO] = AuthedRoutes.of {
-    case GET -> Root / "admin" as _ => Ok()
+  val adminRoute: AuthedRoutes[AuthUser, IO] = AuthedRoutes.of { case GET -> Root / "admin" as _ =>
+    Ok()
   }
 }
