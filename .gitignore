@@ -49,3 +49,5 @@ tq:q
 *DoNotCommit*
 .sbtopts
 .metals
+.vscode
+.bsp
