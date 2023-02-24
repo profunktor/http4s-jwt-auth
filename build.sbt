@@ -61,16 +61,16 @@ lazy val core = (project in file("core"))
     name := "http4s-jwt-auth",
     scalacOptions ++= scalacVaryingOptions(scalaVersion.value),
     libraryDependencies ++=
-        compilerPlugins(scalaVersion.value) :::
-            List(
-              Libraries.cats,
-              Libraries.catsEffect,
-              Libraries.fs2,
-              Libraries.http4sDsl,
-              Libraries.http4sServer,
-              Libraries.jwtCore,
-              Libraries.munit % Test
-            )
+      compilerPlugins(scalaVersion.value) :::
+        List(
+          Libraries.cats,
+          Libraries.catsEffect,
+          Libraries.fs2,
+          Libraries.http4sDsl,
+          Libraries.http4sServer,
+          Libraries.jwtCore,
+          Libraries.munit % Test
+        )
   )
   .settings(commonSettings: _*)
 
@@ -88,28 +88,28 @@ lazy val microsite = project
     micrositeGithubRepo := "http4s-jwt-auth",
     micrositeBaseUrl := "",
     micrositeExtraMdFiles := Map(
-          file("README.md") -> ExtraMdFileConfig(
-                "index.md",
-                "home",
-                Map("title" -> "Home", "position" -> "0")
-              ),
-          file("CODE_OF_CONDUCT.md") -> ExtraMdFileConfig(
-                "CODE_OF_CONDUCT.md",
-                "page",
-                Map("title" -> "Code of Conduct")
-              )
-        ),
+      file("README.md") -> ExtraMdFileConfig(
+        "index.md",
+        "home",
+        Map("title" -> "Home", "position" -> "0")
+      ),
+      file("CODE_OF_CONDUCT.md") -> ExtraMdFileConfig(
+        "CODE_OF_CONDUCT.md",
+        "page",
+        Map("title" -> "Code of Conduct")
+      )
+    ),
     micrositeExtraMdFilesOutput := (Compile / resourceManaged).value / "jekyll",
     micrositeGitterChannel := true,
     micrositeGitterChannelUrl := "profunktor-dev/http4s-jwt-auth",
     scalacOptions --= List(
-          "-Werror",
-          "-Xfatal-warnings",
-          "-Ywarn-unused-import",
-          "-Ywarn-numeric-widen",
-          "-Ywarn-dead-code",
-          "-Xlint:-missing-interpolator,_"
-        )
+      "-Werror",
+      "-Xfatal-warnings",
+      "-Ywarn-unused-import",
+      "-Ywarn-numeric-widen",
+      "-Ywarn-dead-code",
+      "-Xlint:-missing-interpolator,_"
+    )
   )
   .dependsOn(core)
 
