@@ -18,6 +18,8 @@ Add the following dependency to your `build.sbt` (check latest version on the ba
 "dev.profunktor" %% "http4s-jwt-auth" % Version
 ```
 
+This library currently only supports the stable `0.23` series of http4s.
+
 ### Usage
 
 ```scala
