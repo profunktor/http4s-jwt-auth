@@ -1,5 +1,6 @@
 import Dependencies._
 import microsites.ExtraMdFileConfig
+import xerial.sbt.Sonatype.sonatypeCentralHost
 
 ThisBuild / organizationName := "ProfunKtor"
 ThisBuild / crossScalaVersions := List("2.12.19", "2.13.14", "3.3.3")
@@ -17,6 +18,8 @@ ThisBuild / developers := List(
     url("https://gvolpe.com")
   )
 )
+
+ThisBuild / sonatypeCredentialHost := sonatypeCentralHost
 
 def maxClassFileName(v: String) = CrossVersion.partialVersion(v) match {
   case Some((2, 13)) | Some((3, _)) => List.empty[String]
