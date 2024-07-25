@@ -17,6 +17,7 @@ ThisBuild / developers := List(
     url("https://gvolpe.com")
   )
 )
+ThisBuild / versionScheme := Some("early-semver")
 
 def maxClassFileName(v: String) = CrossVersion.partialVersion(v) match {
   case Some((2, 13)) | Some((3, _)) => List.empty[String]
