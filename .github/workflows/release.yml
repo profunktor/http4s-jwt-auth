@@ -2,7 +2,7 @@ name: Release
 on:
   push:
     branches:
-      - series/1.x
+      - series/2.x
     tags:
       - "*"
 

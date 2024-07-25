@@ -3,7 +3,7 @@ on:
   pull_request: {}
   push:
     branches:
-      - series/1.x
+      - series/2.x
 
 jobs:
   build:
