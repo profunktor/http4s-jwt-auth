@@ -79,11 +79,11 @@ trait JwtFixture {
       if (extractId(claim.content) == 123L) AuthUser(123L, "joe").some.pure[IO]
       else none[AuthUser].pure[IO]
 
-  val jwtAuth    = JwtAuth.hmac("53cr3t", JwtAlgorithm.HS256)
+  val jwtAuth    = JwtAuth.hmac("53cr3t".toArray[Char], JwtAlgorithm.HS256)
   val middleware = JwtAuthMiddleware[IO, AuthUser](jwtAuth, authenticate)
 
-  val adminToken  = Jwt.encode(JwtClaim("{123}"), jwtAuth.secretKey.value, jwtAuth.jwtAlgorithms.head)
-  val noUserToken = Jwt.encode(JwtClaim("{666}"), jwtAuth.secretKey.value, jwtAuth.jwtAlgorithms.head)
+  val adminToken  = Jwt.encode(JwtClaim("{123}"), jwtAuth.secretKey.value.mkString, jwtAuth.jwtAlgorithms.head)
+  val noUserToken = Jwt.encode(JwtClaim("{666}"), jwtAuth.secretKey.value.mkString, jwtAuth.jwtAlgorithms.head)
   val randomToken = Jwt.encode(JwtClaim("{000}"), "secret", jwtAuth.jwtAlgorithms.head)
 
   val rootReq         = Request[IO](Method.GET, Uri.unsafeFromString("/"))

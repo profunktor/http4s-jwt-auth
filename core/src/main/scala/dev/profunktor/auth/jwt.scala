@@ -16,6 +16,8 @@
 
 package dev.profunktor.auth
 
+import java.security.PrivateKey
+import java.nio.charset.StandardCharsets
 import cats.*
 import cats.syntax.all.*
 import pdi.jwt.*
@@ -25,7 +27,33 @@ object jwt {
 
   case class JwtToken(value: String) extends AnyVal
 
-  case class JwtSecretKey(value: String) extends AnyVal
+  object JwtSecretKey {
+    def apply(key: Array[Byte]): JwtSecretKey = new JwtSecretKeyByteArr(key)
+    def apply(key: Array[Char]): JwtSecretKey = new JwtSecretKeyCharArr(key)
+    def apply(key: PrivateKey): JwtSecretKey  = new JwtSecretKeyPK(key)
+  }
+  sealed trait JwtSecretKey {
+    def value: Array[Char]
+  }
+  private class JwtSecretKeyCharArr(val value: Array[Char]) extends JwtSecretKey
+  private class JwtSecretKeyByteArr(bytes: Array[Byte]) extends JwtSecretKey {
+    lazy val value = {
+      val byteBuffer = java.nio.ByteBuffer.wrap(bytes)
+      val charBuffer = StandardCharsets.UTF_8.decode(byteBuffer)
+      val charArray  = new Array[Char](charBuffer.remaining())
+      charBuffer.get(charArray)
+      charArray
+    }
+  }
+  private class JwtSecretKeyPK(key: PrivateKey) extends JwtSecretKey {
+    lazy val value = {
+      val byteBuffer = java.nio.ByteBuffer.wrap(key.getEncoded())
+      val charBuffer = StandardCharsets.UTF_8.decode(byteBuffer)
+      val charArray  = new Array[Char](charBuffer.remaining())
+      charBuffer.get(charArray)
+      charArray
+    }
+  }
 
   sealed trait JwtAuth
   case object JwtNoValidation extends JwtAuth
@@ -33,9 +61,18 @@ object jwt {
   case class JwtAsymmetricAuth(publicKey: JwtPublicKey) extends JwtAuth
   object JwtAuth {
     def noValidation: JwtAuth = JwtNoValidation
+    @deprecated(message = "use of string to hold secret keys is deprecated and potentially unsafe", since = "2.x")
     def hmac(secretKey: String, algorithm: JwtHmacAlgorithm): JwtSymmetricAuth =
+      JwtSymmetricAuth(JwtSecretKey(secretKey.toArray[Char]), Seq(algorithm))
+    def hmac(secretKey: Array[Char], algorithm: JwtHmacAlgorithm): JwtSymmetricAuth =
       JwtSymmetricAuth(JwtSecretKey(secretKey), Seq(algorithm))
+    @deprecated(message = "use of string to hold secret keys is deprecated and potentially unsafe", since = "2.x")
     def hmac(secretKey: String, algorithms: Seq[JwtHmacAlgorithm] = JwtAlgorithm.allHmac()): JwtSymmetricAuth =
+      JwtSymmetricAuth(JwtSecretKey(secretKey.toArray[Char]), algorithms)
+    def hmac(
+        secretKey: Array[Char],
+        algorithms: Seq[JwtHmacAlgorithm]
+    ): JwtSymmetricAuth =
       JwtSymmetricAuth(JwtSecretKey(secretKey), algorithms)
   }
 
@@ -47,7 +84,7 @@ object jwt {
   ): F[JwtClaim] =
     (jwtAuth match {
       case JwtNoValidation => Jwt.decode(jwtToken.value, JwtOptions.DEFAULT.copy(signature = false))
-      case JwtSymmetricAuth(secretKey, algorithms) => Jwt.decode(jwtToken.value, secretKey.value, algorithms)
+      case JwtSymmetricAuth(secretKey, algorithms) => Jwt.decode(jwtToken.value, secretKey.value.mkString, algorithms)
       case JwtAsymmetricAuth(publicKey)            => Jwt.decode(jwtToken.value, publicKey.key, publicKey.algorithm)
     }).liftTo[F]
 
@@ -56,7 +93,7 @@ object jwt {
       jwtSecretKey: JwtSecretKey,
       jwtAlgorithm: JwtHmacAlgorithm
   ): F[JwtToken] =
-    JwtToken(Jwt.encode(jwtClaim, jwtSecretKey.value, jwtAlgorithm)).pure[F]
+    JwtToken(Jwt.encode(jwtClaim, jwtSecretKey.value.mkString, jwtAlgorithm)).pure[F]
 
   def jwtEncode[F[_]](jwtClaim: JwtClaim, jwtPrivateKey: JwtPrivateKey)(implicit
       F: ApplicativeError[F, Throwable]
