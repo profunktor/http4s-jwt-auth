@@ -36,7 +36,7 @@ case class AuthUser(id: Long, name: String)
 val authenticate: JwtToken => JwtClaim => IO[Option[AuthUser]] =
   token => claim => AuthUser(123L, "joe").some.pure[IO]
 
-val jwtAuth    = JwtAuth.hmac("53cr3t", JwtAlgorithm.HS256)
+val jwtAuth    = JwtAuth.hmac(Array('5','3','c','r','3','t'), JwtAlgorithm.HS256)
 val middleware = JwtAuthMiddleware[IO, AuthUser](jwtAuth, authenticate)
 
 val routes: AuthedRoutes[AuthUser, IO] = ???
