@@ -53,13 +53,20 @@ lazy val noPublish = List(
   publish / skip := true
 )
 
+lazy val noMima = List(
+  mimaPreviousArtifacts := Set.empty
+)
+
 lazy val root = (project in file("."))
   .aggregate(core, microsite)
   .settings(noPublish)
+  .settings(noMima)
 
-lazy val core = (project in file("core"))
+lazy val core = project
+  .in(file("core"))
   .settings(
     name := "http4s-jwt-auth",
+    mimaPreviousArtifacts := Set("dev.profunktor" %% "http4s-jwt-auth" % "2.0.0"),
     scalacOptions ++= scalacVaryingOptions(scalaVersion.value),
     libraryDependencies ++=
       compilerPlugins(scalaVersion.value) :::
@@ -80,6 +87,7 @@ lazy val microsite = project
   .enablePlugins(MicrositesPlugin)
   .settings(commonSettings: _*)
   .settings(noPublish)
+  .settings(noMima)
   .settings(publishLocalConfiguration := publishLocalConfiguration.value.withOverwrite(true))
   .settings(
     micrositeName := "Http4s Jwt Auth",
@@ -115,4 +123,4 @@ lazy val microsite = project
   .dependsOn(core)
 
 // CI build
-addCommandAlias("fullBuild", ";clean;+test;mdoc")
+addCommandAlias("fullBuild", ";clean;+test;+mimaReportBinaryIssues;mdoc")
