@@ -9,14 +9,14 @@ on:
 jobs:
   build:
     name: Publish
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.3.2
+      - uses: actions/checkout@v4.2.2
         with:
           fetch-depth: 0 # fetch all branches & tags
 
       - name: "Install Nix ❄️"
-        uses: cachix/install-nix-action@v18
+        uses: cachix/install-nix-action@v31
 
       - name: "Publish ${{ github.ref }} 🚀"
         env:
