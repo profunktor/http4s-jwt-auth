@@ -16,7 +16,13 @@ jobs:
         uses: coursier/cache-action@v6.4
 
       - name: "Install Nix ❄️"
-        uses: cachix/install-nix-action@v31
+        uses: cachix/install-nix-action@v31.2.0
 
-      - name: "Run with ${{ matrix.java }} 🚀"
-        run: nix develop -c sbt 'clean;mdoc;+test;+mimaReportBinaryIssues'
+      - name: "Install Cachix ❄️"
+        uses: cachix/cachix-action@v16
+        with:
+          name: profunktor
+          authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
+
+      - name: "Run Scala tests 🚀"
+        run: nix run .#sbt -- 'clean;mdoc;+test;+mimaReportBinaryIssues'
