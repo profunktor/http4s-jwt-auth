@@ -18,7 +18,6 @@ ThisBuild / developers := List(
   )
 )
 ThisBuild / versionScheme := Some("early-semver")
-ThisBuild / sonatypeCredentialHost := xerial.sbt.Sonatype.sonatypeCentralHost
 
 def maxClassFileName(v: String) = CrossVersion.partialVersion(v) match {
   case Some((2, 13)) | Some((3, _)) => List.empty[String]
