@@ -10,7 +10,7 @@ object Dependencies {
     val jwt        = "11.0.3"
 
     val betterMonadicFor = "0.3.1"
-    val kindProjector    = "0.13.3"
+    val kindProjector    = "0.13.4"
 
     val munit = "1.2.0"
   }
