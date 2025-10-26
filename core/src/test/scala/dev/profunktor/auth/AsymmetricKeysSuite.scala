@@ -59,7 +59,7 @@ class AsymmetricKeysSuite extends FunSuite {
 
   test("Encode wby private key and decode by public key") {
     val notCorrectPublicKey = publicKey.replace("Q", "B")
-    val assertionJwtClaim = for {
+    val assertionJwtClaim   = for {
       jwtClaim <- createJwtClaim
       privateKey <- JwtPrivateKey.make[IO](privateKeyPKCS8, JwtAlgorithm.RS256)
       publicKey <- JwtPublicKey.rsa[IO](notCorrectPublicKey, Seq(JwtAlgorithm.RS256, JwtAlgorithm.RS512))

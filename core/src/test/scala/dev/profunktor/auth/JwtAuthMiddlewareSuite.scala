@@ -47,7 +47,7 @@ class JwtAuthMiddlewareSpec extends FunSuite with JwtFixture {
   }
 
   test("Admin Route fails when secret fetching via F[_] fails") {
-    val exception = new Exception("key fetching failed") with NoStackTrace
+    val exception  = new Exception("key fetching failed") with NoStackTrace
     val middleware = JwtAuthMiddleware[IO, AuthUser](
       IO.raiseError(exception),
       authenticate
