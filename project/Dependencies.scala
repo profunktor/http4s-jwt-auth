@@ -12,7 +12,7 @@ object Dependencies {
     val betterMonadicFor = "0.3.1"
     val kindProjector    = "0.13.4"
 
-    val munit = "1.3.5"
+    val munit = "1.3.6"
   }
 
   object Libraries {
